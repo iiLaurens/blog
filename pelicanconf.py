@@ -5,7 +5,7 @@ import os
 
 AUTHOR = u'Laurens'
 SITENAME = u'Laurens\' geeky adventures'
-#SITEURL = 'http://localhost:8000'
+SITEURL = 'http://blog.laurens.xyz'
 RELATIVE_URLS = True
 
 TIMEZONE = 'Europe/Paris'
