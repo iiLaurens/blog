@@ -20,6 +20,9 @@ lib
 lib64
 venv/
 
+# Output
+output/
+
 # Installer logs
 pip-log.txt
 

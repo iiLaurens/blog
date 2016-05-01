@@ -1,0 +1,74 @@
+/*
+
+    Name:       Base16 Monokai Light
+    Author:     Wimer Hazenberg (http://www.monokai.nl)
+
+    Pygments template by Jan T. Sott (https://github.com/idleberg)
+    Created with Base16 Builder by Chris Kempson (https://github.com/chriskempson/base16-builder)
+
+*/
+.highlight pre .hll { background-color: #f5f4f1 }
+.highlight pre  { background: #f9f8f5; color: #272822 }
+.highlight pre .c { color: #a59f85 } /* Comment */
+.highlight pre .err { color: #f92672 } /* Error */
+.highlight pre .k { color: #ae81ff } /* Keyword */
+.highlight pre .l { color: #fd971f } /* Literal */
+.highlight pre .n { color: #272822 } /* Name */
+.highlight pre .o { color: #a1efe4 } /* Operator */
+.highlight pre .p { color: #272822 } /* Punctuation */
+.highlight pre .cm { color: #a59f85 } /* Comment.Multiline */
+.highlight pre .cp { color: #a59f85 } /* Comment.Preproc */
+.highlight pre .c1 { color: #a59f85 } /* Comment.Single */
+.highlight pre .cs { color: #a59f85 } /* Comment.Special */
+.highlight pre .gd { color: #f92672 } /* Generic.Deleted */
+.highlight pre .ge { font-style: italic } /* Generic.Emph */
+.highlight pre .gh { color: #272822; font-weight: bold } /* Generic.Heading */
+.highlight pre .gi { color: #a6e22e } /* Generic.Inserted */
+.highlight pre .gp { color: #a59f85; font-weight: bold } /* Generic.Prompt */
+.highlight pre .gs { font-weight: bold } /* Generic.Strong */
+.highlight pre .gu { color: #a1efe4; font-weight: bold } /* Generic.Subheading */
+.highlight pre .kc { color: #ae81ff } /* Keyword.Constant */
+.highlight pre .kd { color: #ae81ff } /* Keyword.Declaration */
+.highlight pre .kn { color: #a1efe4 } /* Keyword.Namespace */
+.highlight pre .kp { color: #ae81ff } /* Keyword.Pseudo */
+.highlight pre .kr { color: #ae81ff } /* Keyword.Reserved */
+.highlight pre .kt { color: #f4bf75 } /* Keyword.Type */
+.highlight pre .ld { color: #a6e22e } /* Literal.Date */
+.highlight pre .m { color: #fd971f } /* Literal.Number */
+.highlight pre .s { color: #a6e22e } /* Literal.String */
+.highlight pre .na { color: #66d9ef } /* Name.Attribute */
+.highlight pre .nb { color: #272822 } /* Name.Builtin */
+.highlight pre .nc { color: #f4bf75 } /* Name.Class */
+.highlight pre .no { color: #f92672 } /* Name.Constant */
+.highlight pre .nd { color: #a1efe4 } /* Name.Decorator */
+.highlight pre .ni { color: #272822 } /* Name.Entity */
+.highlight pre .ne { color: #f92672 } /* Name.Exception */
+.highlight pre .nf { color: #66d9ef } /* Name.Function */
+.highlight pre .nl { color: #272822 } /* Name.Label */
+.highlight pre .nn { color: #f4bf75 } /* Name.Namespace */
+.highlight pre .nx { color: #66d9ef } /* Name.Other */
+.highlight pre .py { color: #272822 } /* Name.Property */
+.highlight pre .nt { color: #a1efe4 } /* Name.Tag */
+.highlight pre .nv { color: #f92672 } /* Name.Variable */
+.highlight pre .ow { color: #a1efe4 } /* Operator.Word */
+.highlight pre .w { color: #272822 } /* Text.Whitespace */
+.highlight pre .mf { color: #fd971f } /* Literal.Number.Float */
+.highlight pre .mh { color: #fd971f } /* Literal.Number.Hex */
+.highlight pre .mi { color: #fd971f } /* Literal.Number.Integer */
+.highlight pre .mo { color: #fd971f } /* Literal.Number.Oct */
+.highlight pre .sb { color: #a6e22e } /* Literal.String.Backtick */
+.highlight pre .sc { color: #272822 } /* Literal.String.Char */
+.highlight pre .sd { color: #a59f85 } /* Literal.String.Doc */
+.highlight pre .s2 { color: #a6e22e } /* Literal.String.Double */
+.highlight pre .se { color: #fd971f } /* Literal.String.Escape */
+.highlight pre .sh { color: #a6e22e } /* Literal.String.Heredoc */
+.highlight pre .si { color: #fd971f } /* Literal.String.Interpol */
+.highlight pre .sx { color: #a6e22e } /* Literal.String.Other */
+.highlight pre .sr { color: #a6e22e } /* Literal.String.Regex */
+.highlight pre .s1 { color: #a6e22e } /* Literal.String.Single */
+.highlight pre .ss { color: #a6e22e } /* Literal.String.Symbol */
+.highlight pre .bp { color: #272822 } /* Name.Builtin.Pseudo */
+.highlight pre .vc { color: #f92672 } /* Name.Variable.Class */
+.highlight pre .vg { color: #f92672 } /* Name.Variable.Global */
+.highlight pre .vi { color: #f92672 } /* Name.Variable.Instance */
+.highlight pre .il { color: #fd971f } /* Literal.Number.Integer.Long */
