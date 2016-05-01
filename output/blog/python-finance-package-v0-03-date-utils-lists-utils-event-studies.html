@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Python Finance Package v0.03 – Date Utils, Lists Utils, Event Studies - Laurens' geeky adventures</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="../blog/python-finance-package-v0-03-date-utils-lists-utils-event-studies.html">
+
+        <meta name="author" content="Daniel Rodriguez" />
+        <meta name="keywords" content="Coursera,Finance,Pandas,Python,Computational investing" />
+        <meta name="description" content="Continuing with the Python Finance Package. This update took longer because I change my setup to Linux (elementaryos), also things are getting complicated/interesting as my finance knowledge is mostly null, so I am learning as I develop the package, that was part of the plan so no complains about ..." />
+
+        <meta property="og:site_name" content="Laurens' geeky adventures" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Python Finance Package v0.03 – Date Utils, Lists Utils, Event Studies"/>
+        <meta property="og:url" content="../blog/python-finance-package-v0-03-date-utils-lists-utils-event-studies.html"/>
+        <meta property="og:description" content="Continuing with the Python Finance Package. This update took longer because I change my setup to Linux (elementaryos), also things are getting complicated/interesting as my finance knowledge is mostly null, so I am learning as I develop the package, that was part of the plan so no complains about ..."/>
+        <meta property="article:published_time" content="2012-12-26" />
+            <meta property="article:section" content="12" />
+            <meta property="article:tag" content="Coursera" />
+            <meta property="article:tag" content="Finance" />
+            <meta property="article:tag" content="Pandas" />
+            <meta property="article:tag" content="Python" />
+            <meta property="article:tag" content="Computational investing" />
+            <meta property="article:author" content="Daniel Rodriguez" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="../theme/css/bootstrap.yeti.min.css" type="text/css"/>
+    <link href="../theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../theme/css/pygments/zenburn.css" rel="stylesheet">
+    <link href="../theme/tipuesearch/tipuesearch.css" rel="stylesheet">
+    <link rel="stylesheet" href="../theme/css/style.css" type="text/css"/>
+
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="../" class="navbar-brand">
+Laurens' geeky adventures            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li ><a href="../tags.html">Tags</a></li>
+              <li><span>
+                <form class="navbar-search" action="/search.html">
+                  <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input" required>
+                </form></span>
+              </li>
+              <li><a href="../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="../blog/python-finance-package-v0-03-date-utils-lists-utils-event-studies.html"
+                       rel="bookmark"
+                       title="Permalink to Python Finance Package v0.03 – Date Utils, Lists Utils, Event Studies">
+                        Python Finance Package v0.03 – Date Utils, Lists Utils, Event Studies
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2012-12-26T21:48:00+01:00"> 26-12-2012</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="../tags/coursera.html">Coursera</a>
+        /
+	<a href="../tags/finance.html">Finance</a>
+        /
+	<a href="../tags/pandas.html">Pandas</a>
+        /
+	<a href="../tags/python.html">Python</a>
+        /
+	<a href="../tags/computational-investing.html">Computational investing</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>Continuing with the
+<a href="https://github.com/danielfrg/PythonFinance">Python Finance Package</a>. This update took longer because I change my setup to Linux
+(<a href="http://elementaryos.org/" title="elemenaryos">elementaryos</a>), also things are getting complicated/interesting as
+my finance knowledge is mostly null, so I am learning as I develop the
+package, that was part of the plan so no complains about that.</p>
+<p>The objective was to solve the Computational Investing Homework 4. Using
+the current code on the package (EventFinder + MarketSimulator) is
+possible to solve the homework, but I will cover that on a later post.</p>
+<h2>Changes since last time</h2>
+<ol>
+<li>Bug fixes on File Manager and Data Access</li>
+<li>Improved tests</li>
+<li>Added Date Utils and List Utils to manage the open dates from NYSE</li>
+<li>Added Event Studies<ol>
+<li>(Single) Past Event</li>
+<li>Event Finder</li>
+<li>Multiple Events</li>
+</ol>
+</li>
+</ol>
+<h2>Date Utils</h2>
+<ol>
+<li>Returns the dates the market was open between two dates.</li>
+<li>Looks for the closer date on a list of dates and returns the index
+    of that date on the list</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">nyse_dates</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span>
+<span class="n">insideSearch</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="nb">list</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="n">lookbackDays</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lookforwardDays</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">search_closer_date</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">dates</span><span class="p">,</span> <span class="n">exact</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">searchBack</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="n">maxDistance</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Example:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">finance.utils</span> <span class="kn">import</span> <span class="n">DateUtils</span>
+
+<span class="n">all_dates</span> <span class="o">=</span> <span class="n">DateUtils</span><span class="o">.</span><span class="n">nyse_dates</span><span class="p">(</span><span class="nb">list</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">all_dates</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">DateUtils</span><span class="o">.</span><span class="n">nyse_dates</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="n">DateUtils</span><span class="o">.</span><span class="n">search_closer_date</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2009</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">all_dates</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">all_dates</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+</pre></div>
+
+
+<p>Output:</p>
+<div class="highlight"><pre><span></span>[datetime.datetime(2000, 1, 3, 0, 0),
+datetime.datetime(2000, 1, 4, 0, 0),
+datetime.datetime(2000, 1, 5, 0, 0),
+ ...
+datetime.datetime(2012, 12, 21, 0, 0),
+datetime.datetime(2012, 12, 24, 0, 0),
+datetime.datetime(2012, 12, 26, 0, 0)]
+# Note: Length: 3268
+
+2008-01-02    2008-01-02 00:00:00
+2008-01-03    2008-01-03 00:00:00
+2008-01-04    2008-01-04 00:00:00
+2008-01-07    2008-01-07 00:00:00
+   ...
+2012-12-20    2012-12-20 00:00:00
+2012-12-21    2012-12-21 00:00:00
+2012-12-24    2012-12-24 00:00:00
+2012-12-26    2012-12-26 00:00:00
+Length: 1258
+
+2262 2008-12-31 00:00:00
+# Note 2009-1-1 was not open, closer date looking back is 2008-12-31
+</pre></div>
+
+
+<h2>List Utils</h2>
+<ol>
+<li>Date Utils extends the List Utils of dates which only returns all
+    the NYSE dates</li>
+<li>List Utils also provides the symbols from S&amp;P500 each year</li>
+</ol>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">finance.utils</span> <span class="kn">import</span> <span class="n">ListUtils</span>
+
+<span class="n">sp500_2012</span> <span class="o">=</span> <span class="n">ListUtils</span><span class="o">.</span><span class="n">SP500</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2012</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sp500_2012</span><span class="p">),</span> <span class="n">sp500_2012</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output:</p>
+<div class="highlight"><pre><span></span>501 [&#39;A&#39;, &#39;AA&#39;, &#39;AAPL&#39;, ... ,&#39;YUM&#39;, &#39;ZION&#39;, &#39;ZMH&#39;]
+</pre></div>
+
+
+<h2>Simple Past Event</h2>
+<p>Input: date of interest, equity to analyze, market symbol to compare,
+event window length (back and forward) and estimation period length.</p>
+<p>Output: The program downloads the necessary information and analyse the
+event: expected return, abnormal return, cumulative abnormal return,
+t-test.</p>
+<p>Example (same from: <a href="http://www.youtube.com/watch?v=FRNabkJ48vs">http://www.youtube.com/watch?v=FRNabkJ48vs</a>):</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">finance.evtstudy</span> <span class="kn">import</span> <span class="n">PastEvent</span>
+
+<span class="n">pevt</span> <span class="o">=</span> <span class="n">PastEvent</span><span class="p">(</span><span class="s1">&#39;./data&#39;</span><span class="p">)</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="s1">&#39;AAPL&#39;</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">market</span> <span class="o">=</span> <span class="s2">&quot;\^gspc&quot;</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">lookback_days</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">lookforward_days</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">estimation_period</span> <span class="o">=</span> <span class="mi">252</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1"># print(pevt.expected_return)</span>
+<span class="c1"># print(pevt.abnormal_return)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">pevt</span><span class="o">.</span><span class="n">cumulative_abnormal_return</span><span class="p">)</span>
+<span class="c1"># print(pevt.t_test)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Qt4Agg&#39;</span><span class="p">)</span> <span class="c1">#  Probably most people dont need this line</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">pevt</span><span class="o">.</span><span class="n">expected_return</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Output:</p>
+<div class="highlight"><pre><span></span>Date
+2008-12-18 0.024165
+2008-12-19 0.028294
+2008-12-22 -0.000580
+2008-12-23 0.016884
+...
+2009-01-14 0.038178
+2009-01-15 0.014626
+2009-01-16 -0.004774
+2009-01-20 -0.002890
+Name: Cumulative Abnormal Return
+# NOTE: Length: 21
+</pre></div>
+
+
+<p><img alt="Event Study Expected Return" src="/images/blog/2012/12/finance03/expected_return.png" title="Event Study Expected Return" /></p>
+<h2>Event Finder</h2>
+<p>Input: List of equities, date range to search for events,
+event_function [defaults: went_blow(amount), went_above(amount),
+increase(amount), decrease(amount)]</p>
+<p>Output: Looks each equity on each date and creates an event matrix</p>
+<p>Optional/Defaults:</p>
+<ol>
+<li>Loads/saves a cache (pickle) version of the data.</li>
+<li>By default only takes the first event on each equity</li>
+</ol>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><span class="n">evtf</span> <span class="o">=</span> <span class="n">EventFinder</span><span class="p">(</span><span class="s1">&#39;./data&#39;</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AMD&#39;</span><span class="p">,</span> <span class="s1">&#39;CBG&#39;</span><span class="p">]</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="n">evtf</span><span class="o">.</span><span class="n">went_below</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">evtf</span><span class="o">.</span><span class="n">num_events</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">evtf</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Output:</p>
+<div class="highlight"><pre><span></span>2
+
+            AMD  CBG
+Date
+2008-10-27    1  NaN
+2009-02-27  NaN    1
+</pre></div>
+
+
+<h2>Multiple Events</h2>
+<p>Input: Uses the matrix created on the Event Finder and analyse each
+event</p>
+<p>Output:</p>
+<ol>
+<li>For each event<ol>
+<li>Expected return</li>
+<li>Abnormal return</li>
+<li>Cumulative abnormal return</li>
+</ol>
+</li>
+<li>Mean of:<ol>
+<li>Expected returns</li>
+<li>Abnormal returns</li>
+<li>Cumulative abnormal returns</li>
+</ol>
+</li>
+</ol>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">finance.evtstudy</span> <span class="kn">import</span> <span class="n">EventFinder</span><span class="p">,</span> <span class="n">MultipleEvents</span>
+
+<span class="n">evtf</span> <span class="o">=</span> <span class="n">EventFinder</span><span class="p">(</span><span class="s1">&#39;./data&#39;</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AMD&#39;</span><span class="p">,</span> <span class="s1">&#39;CBG&#39;</span><span class="p">]</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="n">evtf</span><span class="o">.</span><span class="n">went_below</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">evtf</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
+
+<span class="n">mevt</span> <span class="o">=</span> <span class="n">MultipleEvents</span><span class="p">(</span><span class="s1">&#39;./data&#39;</span><span class="p">)</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">evtf</span><span class="o">.</span><span class="n">matrix</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">market</span> <span class="o">=</span> <span class="s1">&#39;SPY&#39;</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">lookback_days</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">lookforward_days</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">estimation_period</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">mevt</span><span class="o">.</span><span class="n">mean_abnormal_return</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Qt4Agg&#39;</span><span class="p">)</span> <span class="c1">#  Probably most people dont need this line</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">mevt</span><span class="o">.</span><span class="n">mean_cumulative_abnormal_return</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Output:</p>
+<div class="highlight"><pre><span></span>-20   -0.064385
+-19    0.073792
+ ...
+-1    -0.011918
+ 0     0.009591
+ 1    -0.119249
+ ...
+ 19   -0.076149
+ 20   -0.097525
+</pre></div>
+
+
+<p><img alt="Event Study - Mean Cumulative Abnormal Returns" src="/images/blog/2012/12/finance03/expected_return.png" title="Event Study - Mean Cumulative Abnormal Returns" /></p>
+<h2>Conclusion</h2>
+<p>As usual the code is on github: <a href="https://github.com/danielfrg/PythonFinance">PythonFinance</a></p>
+<p><em>What is next?</em> A more real-life example using ipython</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+                    var disqus_identifier = 'python-finance-package-v0-03-date-utils-lists-utils-event-studies';
+                var disqus_url = '../blog/python-finance-package-v0-03-date-utils-lists-utils-event-studies.html';
+
+            var disqus_config = function () {
+                this.language = "en";
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2013 Laurens
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="../theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="../theme/js/respond.min.js"></script>
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+</body>
+</html>

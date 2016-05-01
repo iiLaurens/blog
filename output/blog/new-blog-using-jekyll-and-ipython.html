@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>New blog using Jekyll & iPython - Laurens' geeky adventures</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="../blog/new-blog-using-jekyll-and-ipython.html">
+
+        <meta name="author" content="Daniel Rodriguez" />
+        <meta name="keywords" content="Jekyll,IPython,Python" />
+        <meta name="description" content="Recently I restart my blog by moving from wordpress.com to github pages the reason is than about two weeks ago I found a blog on a github page using octopress (jekyll) and after reading 20 minutes I immediately wanted to use it and decide to switch. Wordpress is a ..." />
+
+        <meta property="og:site_name" content="Laurens' geeky adventures" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="New blog using Jekyll &amp; iPython"/>
+        <meta property="og:url" content="../blog/new-blog-using-jekyll-and-ipython.html"/>
+        <meta property="og:description" content="Recently I restart my blog by moving from wordpress.com to github pages the reason is than about two weeks ago I found a blog on a github page using octopress (jekyll) and after reading 20 minutes I immediately wanted to use it and decide to switch. Wordpress is a ..."/>
+        <meta property="article:published_time" content="2013-01-31" />
+            <meta property="article:section" content="01" />
+            <meta property="article:tag" content="Jekyll" />
+            <meta property="article:tag" content="IPython" />
+            <meta property="article:tag" content="Python" />
+            <meta property="article:author" content="Daniel Rodriguez" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="../theme/css/bootstrap.yeti.min.css" type="text/css"/>
+    <link href="../theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../theme/css/pygments/zenburn.css" rel="stylesheet">
+    <link href="../theme/tipuesearch/tipuesearch.css" rel="stylesheet">
+    <link rel="stylesheet" href="../theme/css/style.css" type="text/css"/>
+
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="../" class="navbar-brand">
+Laurens' geeky adventures            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li ><a href="../tags.html">Tags</a></li>
+              <li><span>
+                <form class="navbar-search" action="/search.html">
+                  <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input" required>
+                </form></span>
+              </li>
+              <li><a href="../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="../blog/new-blog-using-jekyll-and-ipython.html"
+                       rel="bookmark"
+                       title="Permalink to New blog using Jekyll & iPython">
+                        New blog using Jekyll & iPython
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2013-01-31T00:00:00+01:00"> 31-01-2013</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="../tags/jekyll.html">Jekyll</a>
+        /
+	<a href="../tags/ipython.html">IPython</a>
+        /
+	<a href="../tags/python.html">Python</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>Recently I restart my blog by moving from wordpress.com to github pages the reason is than about two weeks ago I found a blog on a github page using <a href="http://octopress.org/">octopress</a> (<a href="https://github.com/mojombo/jekyll">jekyll</a>) and after reading 20 minutes I immediately wanted to use it and decide to switch. Wordpress is a good piece of software but wordpress.com is not, my complaints are.</p>
+<ul>
+<li>Is not fast enough</li>
+<li>Can't have custom analytics and the wordpress analytics sucks.</li>
+<li>Can't modify HTML or even CSS</li>
+<li>Don't have markdown support</li>
+</ul>
+<p>Jekyll has all of that and nd github pages for hosting is just magnificent. Publish a new post with git is how <a href="http://tom.preston-werner.com/2008/11/17/blogging-like-a-hacker.html">a hacker</a> should do it.</p>
+<p>I tried to find a python alternative, there are some specially <a href="http://ringce.com/hyde">Hyde</a> but the github page shows that the last commit was 2 years ago, while jekyll is actively developed and a much better alternative. At the end of the day it is not necessary to use ruby which is good because I have no idea about it.</p>
+<p>And the most interesting part is that it adapts to any person/environment. For example can use only markdown but my past three posts have been done with <a href="http://ipython.org/ipython-doc/dev/index.html">iPython notebook</a> and then converted to html. Which is just an amazing way to share, and at least 10 times faster than copy/pasting code to Wordpress.</p>
+<p>So i decide to design my own blog using jekyll. I discard octopress because I wanted to be a more customized site and really is not necessary.</p>
+<h2>Design</h2>
+<p>I am not a designer so I use <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> and take inspiration from some site (that is copy a lot of CSS). I tried to learn haml but did not work for me, instead I prefer the zen-coding plugin. Finally I use <a href="http://lesscss.org/">Less</a> with a Jekyll plugin to do the CSS.</p>
+<h2>iPython notebook</h2>
+<p>I use a little modified version of this <a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/">code</a> to convert an iPython notebook to HTML and added it to Jekyll without messing the CSS of the blog: <a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/">Blogging With IPython in Octopress</a></p>
+<p>The only modification I did was to merge two commands into one, because I am that lazy.</p>
+<h2>Plugins</h2>
+<p>Github pages support Jekyll but not some of its plugins such as the <a href="http://lesscss.org/">LESS</a> plugins. There is a very simple workaround for that. Just have to run Jekyll locally with all the plugins you want, and then just upload the compiled HTML,CSS,JS,... to the repository and github will display the static/compiled content.</p>
+<p>So in my repository I have all the templates, posts, images, markdown, and everything else on folder named <code>source</code>; that way jekyll creates the static content into <code>source/_site</code>. Then when I am happy with new post or new design I use a very simple python <a href="http://fabfile.org/">fabfile</a> to clean the root (ignoring the <code>source</code> and <code>.git</code> folders) then it moves the contents of <code>source/_site</code> to the root of the repository, then commits the changes and finally clean the root again.</p>
+<p>I try to make the site plugin agnostic because I don't now ruby but I try to complement that with a few YAML tags and if's on the layous, for example only have to put a YAML tag on each post file and the picture is added automaticly to the index and post pages. That also happens with youtube and vimeo videos.</p>
+<p>Finally the source of the site is on <a href="https://github.com/danielfrg/danielfrg.github.com">github</a> if anyone want to take a look.</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+                    var disqus_identifier = 'new-blog-using-jekyll-and-ipython';
+                var disqus_url = '../blog/new-blog-using-jekyll-and-ipython.html';
+
+            var disqus_config = function () {
+                this.language = "en";
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2013 Laurens
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="../theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="../theme/js/respond.min.js"></script>
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+</body>
+</html>

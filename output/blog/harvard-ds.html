@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Review: Harvard Data Science - Fall 2013 - Laurens' geeky adventures</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="../blog/harvard-ds.html">
+
+        <meta name="author" content="Daniel Rodriguez" />
+        <meta name="keywords" content="Python,Data,NLP,Statistics,Bayesian,Graphs" />
+        <meta name="description" content="A few weeks/months ago I found on HackerNews that Harvard was publishing all their Data Science course content (lectures, videos, labs, homeworks) online. I couldn&#39;t miss the opportunity to find what are they teaching, it was a nice experience to see how much I have learned and what ..." />
+
+        <meta property="og:site_name" content="Laurens' geeky adventures" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Review: Harvard Data Science - Fall 2013"/>
+        <meta property="og:url" content="../blog/harvard-ds.html"/>
+        <meta property="og:description" content="A few weeks/months ago I found on HackerNews that Harvard was publishing all their Data Science course content (lectures, videos, labs, homeworks) online. I couldn&#39;t miss the opportunity to find what are they teaching, it was a nice experience to see how much I have learned and what ..."/>
+        <meta property="article:published_time" content="2013-11-23" />
+            <meta property="article:section" content="11" />
+            <meta property="article:tag" content="Python" />
+            <meta property="article:tag" content="Data" />
+            <meta property="article:tag" content="NLP" />
+            <meta property="article:tag" content="Statistics" />
+            <meta property="article:tag" content="Bayesian" />
+            <meta property="article:tag" content="Graphs" />
+            <meta property="article:author" content="Daniel Rodriguez" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="../theme/css/bootstrap.yeti.min.css" type="text/css"/>
+    <link href="../theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../theme/css/pygments/zenburn.css" rel="stylesheet">
+    <link href="../theme/tipuesearch/tipuesearch.css" rel="stylesheet">
+    <link rel="stylesheet" href="../theme/css/style.css" type="text/css"/>
+
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="../" class="navbar-brand">
+Laurens' geeky adventures            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li ><a href="../tags.html">Tags</a></li>
+              <li><span>
+                <form class="navbar-search" action="/search.html">
+                  <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input" required>
+                </form></span>
+              </li>
+              <li><a href="../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="../blog/harvard-ds.html"
+                       rel="bookmark"
+                       title="Permalink to Review: Harvard Data Science - Fall 2013">
+                        Review: Harvard Data Science - Fall 2013
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2013-11-23T00:00:00+01:00"> 23-11-2013</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="../tags/python.html">Python</a>
+        /
+	<a href="../tags/data.html">Data</a>
+        /
+	<a href="../tags/nlp.html">NLP</a>
+        /
+	<a href="../tags/statistics.html">Statistics</a>
+        /
+	<a href="../tags/bayesian.html">Bayesian</a>
+        /
+	<a href="../tags/graphs.html">Graphs</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>A few weeks/months ago I found on HackerNews that Harvard was publishing all their <a href="http://cs109.org/">Data Science course content</a> (lectures, videos, labs, homeworks) online. I couldn't miss the opportunity to find what are they teaching, it was a nice experience to see how much I have learned and what else I am missing. Also, when I saw that everything was on python I knew they are doing it right!</p>
+<p>The homeworks are IPython notebooks, the books are what I consider every Data Scientist should read: <a href="http://shop.oreilly.com/product/0636920023784.do">Python for Data Analysis</a>, <a href="http://shop.oreilly.com/product/0636920018483.do">Machine Learning for Hackers</a>, <a href="http://nbviewer.ipython.org/urls/raw.github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Prologue/Prologue.ipynb">Probabilistic Programming and Bayesian methods for Hackers</a>.</p>
+<p>The homeworks were amazing and useful, I haven't seen all the videos (yet) but the ones I did were amazing. Below I do a little review of each homework, the stuff I learned and stuff that I think should be different.</p>
+<p>Initially I wanted to use this opportunity to get into <a href="http://julialang.org/">Julia</a>, but the amount of libraries that are available on python and not on Julia was to high for me to drive me back into python (once again).</p>
+<h2>Homework 0</h2>
+<p><a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/harvard-cs109-fall-2013/master/homeworks/HW0/HW0_mysolution.ipynb">My solution</a></p>
+<p>Basic introduction to python and some of it scientific libraries.</p>
+<p>Things I changed:
+Use beautifulsoup4 instead of 3, not sure why they decided to go with an deprecated version.</p>
+<h2>Homework 1</h2>
+<p><a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/harvard-cs109-fall-2013/master/homeworks/HW1/HW1_mysolution.ipynb">My solution</a></p>
+<p>The main idea was to scrape data from the web, in my opinion one of the most important things a Data Scientist can do is to grab its own data, it gives a big boost to analysis if the person responsible for the analysis decides upfront what data is needed. Is doesn't need to be perfect at first, but usually helps <strong>a lot</strong>.</p>
+<p>The final problem shows the properties of bootstrapping, a must know. Also some simple problems to get started with matplotlib.</p>
+<p>I knew about <a href="http://www.clips.ua.ac.be/pattern">pattern</a> but never had the chance to play with it. I learned that includes a xml/html parser that creates a DOM so one can access the different fields/tags, I usually use <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">beautifulsoup</a> for html and <a href="http://lxml.de/">lxml</a> for xml but is nice to have an alternative.</p>
+<p>I had no idea about <a href="http://docs.python.org/2/library/fnmatch.html">fnmatch</a>, I always used regular expressions but I think that for simple matching tasks I am going to use fnmatch from now own and hopefully will save me some time.</p>
+<h2>Homework 2</h2>
+<p><a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/harvard-cs109-fall-2013/master/homeworks/HW2/HW2_mysolution.ipynb">My solution</a></p>
+<p>A basic introduction to statistical models by doing a predictions the Obama campaign, very interesting exercise. I felt like Nate Silver and it was kind of the idea, show that is possible to do a simple but useful prediction doing a reasonable amount of work. As with a lot of work with data usually the 80% gets done in 20% of the time but the remaining 20% takes the remaining 80% of the time.</p>
+<p>What I changed:</p>
+<ol>
+<li>Used scipy.stats for probability calculations instead of doing those myself. DRY.</li>
+<li>I tried the new ggplot for python to do some of the plots faster, worked perfectly</li>
+</ol>
+<h2>Homework 3</h2>
+<p><a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/harvard-cs109-fall-2013/master/homeworks/HW3/HW3_mysolution.ipynb">My solution</a></p>
+<p>Interesting problem of making a simple prediction of movies reviews intro two categories (fresh or rotten).</p>
+<p>I liked the problem but I think it would be a good idea to use <a href="http://nltk.org/">NLTK</a> instead of hand writing some of the functions and doing a hand made classifier using scikit-learn. I realize that it is <strong>really</strong> easy to do it using the Vectorizer and Naive Bayes classes and I had never done it before so it was a good learning experience, but an introduction to NLTK would be nice.</p>
+<p>The example is very easy to reproduce in NLTK as NLTKs author <a href="http://streamhacker.com/2010/05/10/text-classification-sentiment-analysis-naive-bayes-classifier">showed in his blog</a>. Is an old post but I was able to reproduce the results a few months ago and I was amazed by the results of a simple sentiment classifier. I believe the course missed an opportunity to teach this.</p>
+<p>I liked the cross-validation and specially the <strong>model calibration</strong> sections. Also the rotten tomatoes API is a pretty good source of data.</p>
+<h2>Homework 4</h2>
+<p><a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/harvard-cs109-fall-2013/master/homeworks/HW4/HW4_mysolution.ipynb">My solution</a></p>
+<p>For sure the most interesting homework. Not only a nice collaborative filtering problem (with some bayesian analysis) but also an introduction to MapReduce jobs on hadoop using MRJob. I never used MRJob before so it was nice to use it for the first time <strong>but</strong> I don't think it will replace my love for  <a href="https://github.com/spotify/luigi">luigi</a>.</p>
+<p><a href="https://github.com/spotify/luigi">Luigi</a> is a nice and small library form the guys at spotify. It comes with hadoop support built in but at the same time can be extended to any kind of data jobs (e.g. postgres or simple text files). Since I found about luigi I have been writing a lot of code as pipelines and I could not be happier.</p>
+<p>MRJob killer feature is EMR support that luigi does not have currently. Another nice feature of MRJob is the first class documentation. Luigi on the other hand is limited to a Readme file and you will have to read the source code to discover some features, but it is worth it.</p>
+<p>I have to say that MRJob is very easy and to <strong>MapReduce only</strong> jobs is the way to go, I highly recommend it.</p>
+<p>My knowledge about collaborative filtering was (and still is) <strong>very</strong> limited so I only have to say that I loved to learn about it!</p>
+<h2>Homework 5</h2>
+<p><a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/harvard-cs109-fall-2013/master/homeworks/HW5/HW5_mysolution.ipynb">My solution</a></p>
+<p>Graphs was always that topic that for some reason I haven't dive into yet, but is definitely in my thing to learn list. So I took this opportunity to learn everything I could by watching the lectures and doing the homework.
+I also grabbed a copy of <a href="http://graphdatabases.com">graph databases by O'reilly</a> from the university library and I am very exited about it, I am a little behind on my reading so it might take a while.</p>
+<p>The homework was about the congress and the relation between them. Nothing fancy but interesting.
+Second homework that is about politics, I guess that the data is available but it would be nice to chose a different topic.</p>
+<h2>Conclusion</h2>
+<p>The objective of learning new stuff was accomplished. The course gave me perfect introduction to a variety of topics and I have more clear ideas on how to proceed from now own.</p>
+<p>I had a lot of fun doing the homeworks, I learned a lot of stuff I didn't knew before. The statistics sections were a little bit hard for me but that was the idea.  I felt really comfortable with a lot of the tools used so I know I am doing it right. Finally, now I know in what I need to focus more.</p>
+<p>The main conclusion I got is that there is still a lot to learn and the Data Science space keeps changing every day, that is the reason I like it: When I think I am good at something, I realize I am just getting started.</p>
+<p>Thanks to Harvard for publishing all the content online.</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+                    var disqus_identifier = 'harvard-ds';
+                var disqus_url = '../blog/harvard-ds.html';
+
+            var disqus_config = function () {
+                this.language = "en";
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2013 Laurens
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="../theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="../theme/js/respond.min.js"></script>
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+</body>
+</html>

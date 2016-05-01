@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>word2vec in yhat: Word vector similarity - Laurens' geeky adventures</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="../blog/word2vec-yhat.html">
+
+        <meta name="author" content="Daniel Rodriguez" />
+        <meta name="keywords" content="Python,word2vec,YHat,Machine learning" />
+        <meta name="description" content="A few weeks ago Google released some code to convert words to vectors called word2vec. The company I am currently working on does something similar and I was quite amazed by the performance and accuracy of Google&#39;s algorithm so I created a simple python wrapper to call the C ..." />
+
+        <meta property="og:site_name" content="Laurens' geeky adventures" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="word2vec in yhat: Word vector similarity"/>
+        <meta property="og:url" content="../blog/word2vec-yhat.html"/>
+        <meta property="og:description" content="A few weeks ago Google released some code to convert words to vectors called word2vec. The company I am currently working on does something similar and I was quite amazed by the performance and accuracy of Google&#39;s algorithm so I created a simple python wrapper to call the C ..."/>
+        <meta property="article:published_time" content="2013-09-21" />
+            <meta property="article:section" content="09" />
+            <meta property="article:tag" content="Python" />
+            <meta property="article:tag" content="word2vec" />
+            <meta property="article:tag" content="YHat" />
+            <meta property="article:tag" content="Machine learning" />
+            <meta property="article:author" content="Daniel Rodriguez" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="../theme/css/bootstrap.yeti.min.css" type="text/css"/>
+    <link href="../theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../theme/css/pygments/zenburn.css" rel="stylesheet">
+    <link href="../theme/tipuesearch/tipuesearch.css" rel="stylesheet">
+    <link rel="stylesheet" href="../theme/css/style.css" type="text/css"/>
+
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="../" class="navbar-brand">
+Laurens' geeky adventures            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li ><a href="../tags.html">Tags</a></li>
+              <li><span>
+                <form class="navbar-search" action="/search.html">
+                  <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input" required>
+                </form></span>
+              </li>
+              <li><a href="../archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="../blog/word2vec-yhat.html"
+                       rel="bookmark"
+                       title="Permalink to word2vec in yhat: Word vector similarity">
+                        word2vec in yhat: Word vector similarity
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2013-09-21T00:00:00+02:00"> 21-09-2013</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="../tags/python.html">Python</a>
+        /
+	<a href="../tags/word2vec.html">word2vec</a>
+        /
+	<a href="../tags/yhat.html">YHat</a>
+        /
+	<a href="../tags/machine-learning.html">Machine learning</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>A <a href="http://google-opensource.blogspot.com/2013/08/learning-meaning-behind-words.html">few weeks ago</a>
+Google released some code to convert words to vectors called
+<a href="https://code.google.com/p/word2vec/">word2vec</a>.
+The company I am currently working on does something similar and I was quite amazed by the performance
+and accuracy of Google's algorithm so I created a simple python wrapper to call the C code for training
+and read the training vectors into numpy arrays, you can check it out on
+<a href="https://pypi.python.org/pypi/word2vec">pypi (word2vec)</a>.</p>
+<p>At the same time I found out about <a href="http://yhathq.com/">yhat</a>, I found about them
+via twitter and after reading their blog I had to try their product. What they do is very simple
+but very useful: take some python (scikit-learn) or R classifier and create a REST
+endpoint to make predictions on new data. The product is still in very beta but the guys were
+very responsive and they helped me to solve some of my issues.</p>
+<p>The only restriction I had is the yhat limit for free accounts is 50 Mgs per classifier which on this
+particular case is not enough so I had to reduce the vector size to 25 from the default (100).
+And reduce it to only 70k vectors, so the results in the app below are a little limited, but the results
+are very similar.</p>
+<h2>Training</h2>
+<p>Using my <a href="https://pypi.python.org/pypi/word2vec">word2vec wrapper</a> is as simple as download and unzip the text8 <a href="http://mattmahoney.net/dc/text8.zip">(link)</a> file and:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">word2vec</span> <span class="kn">import</span> <span class="n">word2vec</span>
+<span class="n">word2vec</span><span class="p">(</span><span class="s1">&#39;text8&#39;</span><span class="p">,</span> <span class="s1">&#39;text8-25.vec&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This created a file (<code>text8-25.vec</code>) with the vectors that can be loaded into numpy. Again using my <a href="https://pypi.python.org/pypi/word2vec">word2vec wrapper</a> is really simple:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">word2vec</span> <span class="kn">import</span> <span class="n">WordVectors</span>
+<span class="n">vectors</span> <span class="o">=</span> <span class="n">WordVectors</span><span class="p">(</span><span class="s1">&#39;text8-31.vec&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h2>Yhat</h2>
+<p>Then just need to create a yhat model and in the <code>predict</code> method calculate the distance between the vectors.
+That code is also included on my word2vec package using scipy cosine distance (<a href="http://nbviewer.ipython.org/urls/raw.github.com/danielfrg/word2vec/master/examples/demo-word.ipynb">example</a>),
+on this case I just used the numpy <code>linalg.norm</code>.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">yhat</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span> <span class="nc">Word2VecCLF</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Calculate distances</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">request</span><span class="p">[</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">request</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;n&#39;</span> <span class="ow">in</span> <span class="n">request</span> <span class="k">else</span> <span class="mi">10</span>
+
+        <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e6</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+        <span class="n">words</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span>
+        <span class="n">vectors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectors</span>
+
+        <span class="n">target_ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">words</span> <span class="o">==</span> <span class="n">target</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">vector</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">vectors</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">n_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="n">target_ix</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">vector</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">n_dist</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">distances</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">n_dist</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">distances</span><span class="p">):</span>
+                        <span class="n">distances</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_dist</span><span class="p">)</span>
+                        <span class="n">distances</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+                        <span class="n">values</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+                        <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dist_1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">distances</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+                            <span class="n">dist_2</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">n_dist</span> <span class="o">&lt;</span> <span class="n">dist_2</span> <span class="ow">and</span> <span class="n">n_dist</span> <span class="o">&gt;=</span> <span class="n">dist_1</span><span class="p">:</span>
+                                <span class="n">distances</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_dist</span><span class="p">)</span>
+                                <span class="n">distances</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+                                <span class="n">values</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>
+                                <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+                                <span class="k">break</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;distances&#39;</span><span class="p">:</span> <span class="n">distances</span><span class="p">,</span> <span class="s1">&#39;words&#39;</span><span class="p">:</span> <span class="n">values</span><span class="p">}</span>
+</pre></div>
+
+
+<p>Then just need to upload to yhat.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yhat</span> <span class="kn">import</span> <span class="n">Yhat</span>
+<span class="n">yh</span> <span class="o">=</span> <span class="n">Yhat</span><span class="p">(</span><span class="s2">&quot;EMAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;TOKEN&quot;</span><span class="p">)</span>
+<span class="n">yh</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="s2">&quot;word2vec&quot;</span><span class="p">,</span> <span class="n">word2vec_clf</span><span class="p">)</span>
+</pre></div>
+
+
+<p>If everything goes fine you have a REST endpoint you can call.</p>
+<p><a id="example"></a></p>
+<h2>Example</h2>
+<p>I built a simple app using <a href="http://angularjs.org/">angularJS</a>.
+Just type any word and the number of close word vectors you want and click the button.
+On the list that it generates you can click on any word and it will give you the neighbors for that word.</p>
+<div ng-app="app">
+    <div ng-controller="MainCtrl">
+        <form class="form-inline" role="form" style="max-width: 550px; margin: 0 auto;">
+            <div class="form-group">
+                <input type="text" class="form-control" ng-model="form_word" placeholder="a word">
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" ng-model="form_n">
+            </div>
+            <button class="btn btn-default" ng-click="formRequest()">Request</button>
+        </form>
+
+        <table class="table" style="max-width: 350px; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>word</th>
+                    <th>distance</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="word in words">
+                <td><a href="#example" ng-click="listRequest(word.word)" eat-click>{{word.word}}</a></td>
+                <td>{{word.distance}}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+var app = angular.module('app', []);
+
+app.directive('eatClick', function() {
+    return function(scope, element, attrs) {
+        $(element).click(function(event) {
+            event.preventDefault();
+        });
+    }
+})
+
+var MainCtrl = function($scope, $http) {
+    $scope.form_word = '';
+    $scope.form_n = 10;
+    $scope.words = [];
+
+    $scope.formRequest = function() {
+        $scope.request($scope.form_word, $scope.form_n);
+    }
+
+    $scope.listRequest = function(word) {
+        $scope.request(word, $scope.form_n);
+    }
+
+    $scope.request = function(word, n) {
+        var BASE_URL = 'http://cors.io/api.yhathq.com/predict?username=df.rodriguez143%40gmail.com&model=word2vec&apikey=5162184b820a6ac92274bec2e98b8c88&version=23';
+        var data = {"data": {"word": word, "n": n} }
+
+        $http.post(BASE_URL, data)
+            .success(function (data, status, headers, config) {
+                $scope.words = [];
+
+                for (var i = 0; i < data.prediction.words.length; i++) {
+                    $scope.words.push({"word": data.prediction.words[i],
+                                       "distance": data.prediction.distances[i]});
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+    }
+}
+
+</script>
+
+<h2>Conclusions</h2>
+<p>Definitely some interesting new technologies and tools to keep and eye on. Thanks to Google for
+open sourcing the code and thanks to yhat for a good product. I had to do something similar a few
+weeks ago and my solution was to use ZMQ to connect the rest endpoint with the actual
+classifier yhat makes that possible in 5% of the time.</p>
+<p><strong>Found some interesting relations?</strong> Let me know in the comments below.</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+                    var disqus_identifier = 'word2vec-yhat';
+                var disqus_url = '../blog/word2vec-yhat.html';
+
+            var disqus_config = function () {
+                this.language = "en";
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2013 Laurens
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="../theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="../theme/js/respond.min.js"></script>
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'iilaurens'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+</body>
+</html>
