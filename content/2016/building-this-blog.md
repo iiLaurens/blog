@@ -1,7 +1,7 @@
 Title: Building this blog
 Slug: building-this-blog
 Date: 2016-05-01 15:17
-Tags: Python Pelican Github-pages
+Tags: Python, Pelican, Github pages, venv
 Author: Laurens
 
 With the creation of this site I immediately have a topic to write about. In this

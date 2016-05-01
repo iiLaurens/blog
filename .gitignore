@@ -23,6 +23,9 @@ venv/
 # Output
 output/
 
+# Automation
+update.bat
+
 # Installer logs
 pip-log.txt
 
