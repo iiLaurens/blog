@@ -54,8 +54,8 @@ DISQUS_SITENAME = 'iilaurens'
 STATIC_PATHS = ['images', 'files', 'extra/CNAME']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
 
-ARTICLE_URL = 'blog/{slug}.html'
-ARTICLE_SAVE_AS = 'blog/{slug}.html'
+ARTICLE_URL = 'post/{slug}.html'
+ARTICLE_SAVE_AS = 'post/{slug}.html'
 PAGE_URL = '{slug}.html'
 PAGE_SAVE_AS = '{slug}.html'
 TAG_URL = 'tags/{slug}.html'
