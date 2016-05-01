@@ -19,7 +19,7 @@
             {% for tag, articles in tags|sort %}
             <li>
             {% set num = articles|count %}
-            <a class="label label-default" href="/tags.html#{{ tag|replace(' ', '-')|e }}-ref">{{ tag }}<span>{{ num }}</span></a>
+            <a class="label label-default" href="{{ SITEURL }}/tags.html#{{ tag|replace(' ', '-')|e }}-ref">{{ tag }}<span>{{ num }}</span></a>
             </li>
             {% endfor %}
         </ul>
