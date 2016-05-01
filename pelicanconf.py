@@ -45,6 +45,7 @@ PLUGIN_PATHS = ['plugins']
 
 DIRECT_TEMPLATES = ('index', 'archives', 'search', 'tags')
 
+DISPLAY_ARTICLE_INFO_ON_INDEX = True
 
 PLUGINS = ['tipue_search']
 
@@ -61,3 +62,5 @@ PAGE_SAVE_AS = '{slug}.html'
 TAG_URL = 'tags/{slug}.html'
 TAG_SAVE_AS = 'tags/{slug}.html'
 TAGS_URL = 'tags.html'
+
+GOOGLE_ANALYTICS = "UA-77190701-1"
