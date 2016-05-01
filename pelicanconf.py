@@ -54,6 +54,7 @@ PLUGINS = ['tipue_search']
 DISQUS_SITENAME = 'iilaurens'
 #ADDTHIS_PROFILE = 'ra-520d4af6518bf3c7'
 
+EXTRA_PATH_METADATA = {'extra\CNAME': {'path': 'CNAME'}}
 
 ARTICLE_URL = 'blog/{slug}.html'
 ARTICLE_SAVE_AS = 'blog/{slug}.html'
