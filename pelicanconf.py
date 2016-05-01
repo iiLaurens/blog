@@ -45,8 +45,6 @@ PLUGIN_PATHS = ['plugins']
 
 DIRECT_TEMPLATES = ('index', 'archives', 'search', 'tags')
 
-DISPLAY_ARTICLE_INFO_ON_INDEX = True
-
 PLUGINS = ['tipue_search']
 
 DISQUS_SITENAME = 'iilaurens'
