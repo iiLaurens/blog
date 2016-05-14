@@ -1,5 +1,5 @@
 Title: Initializing the Raspberry Pi 3 (headless)
-Slug: building-this-blog
+Slug: Initializing-the-raspberry-pi-3
 Date: 2016-05-03 20:15
 Tags: Raspberry Pi 3, Settings
 Author: Laurens
