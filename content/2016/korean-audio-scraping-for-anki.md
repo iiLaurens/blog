@@ -50,7 +50,9 @@ and extended to have more sound fragments. In total, I found that this script ad
 You clearly see the code and think, should I really run this and set this all up? No,
 I understand completely as true programmers are inherently lazy (hence they let programs
 do their work). I have simply uploaded a fresh copy of the original deck as stated above,
-on which my script did all the heavy lifting. You can simply [download it here]({filename}/files/Korean vocabulary by Evita and Laurens.apkg). I hope this helps you!
+on which my script did all the heavy lifting. You can simply [download it here]({filename}/files/Korean vocabulary by Evita and Laurens.apkg). I hope this extended
+deck helps you as much as it did for me!
+
 
 ### The python script
 ```python
