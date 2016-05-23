@@ -4,27 +4,27 @@ Date: 2016-05-22 12:44
 Tags: Anki, korean, audio, scraper, python
 Author: Laurens
 
-Besides programming, I am also quite fond of the korean language. One of the apps I
+Besides programming, I am also quite fond of the Korean language. One of the apps I
 use to study korean is [Anki](www.ankisrs.net). Anki is a program that enables people
 to remember information efficiently using a spaced repetition algorithm. Anki is definitely
 not a sexy app by any means, especially compared to the webbased [Memrise](www.memrise.com),
-but it provides a huge amount of control for the enduser. I have come to love Anki for
+but it provides a huge amount of control for the end-user. I have come to love Anki for
 this very reason.
 
 Anki also provides an easy distribution system where people can share their *decks*. If there
 is any language and language course that you are taking, there is probably someone out
 there who did it before you and shared an Anki deck for it. Finding quality decks however is
-rather hard. Luckily, for the korean language I found an excellent [korean vocabulary deck
+rather hard. Luckily, for the Korean language I found an excellent [Korean vocabulary deck
 by Evita](https://ankiweb.net/shared/info/4066961604). For what it's worth, I like to
 give credits to her for making my studies so much easier. The deck contains thousands of the
 most common words in decreasing order. There is a decent amount of sounds added to,
 which really helps with getting the pronunciation right. Unfortunately, too often I found
 that sounds are missing. I really wanted to have a more complete set of sound fragments to
-improve my studiesm so decided to write a little script in Python to do this for me.
+improve my studies so decided to write a little script in Python to do this for me.
 I will briefly guide you through the steps that are needed to run this script.
 
 # Scraping sound fragments and adding it to your deck
-First, obtain the [korean vocabulary deck by Evita](https://ankiweb.net/shared/info/4066961604) to operate on.
+First, obtain the [Korean vocabulary deck by Evita](https://ankiweb.net/shared/info/4066961604) to operate on.
 **If you already have made progress in this deck and do not want to lose it**,
 it is also possible to export this deck from your own Anki environment. Make sure to include
 the progress whilst exporting the `.apkg` file. Copy this file to a empty directory,
@@ -43,9 +43,8 @@ python script.py
 Executing the script will take a few hours. Please wait for it to finish. But no worries,
 the script can be interrupted. Simply run the script again to continue where it left off.
 In the end, a new file should have appeared named `out.apkg`. This is the new deck,
-containing all your originals cards and progress of you korean vocabulary deck (by *Evita*),
-and extended to have more sound fragments. In total, I found that this script increases
-the sound fragment by 4230 samples making *a total of 4923* notes with audio.
+containing all your originals cards and progress of you Korean vocabulary deck (by *Evita*),
+and extended to have more sound fragments. In total, I found that this script adds **4130 new sound fragments**, making a total of 4823 notes with audio and just around 90 that still lack audio. That's quite a significant improvement!
 
 # Can't you just give me your deck?
 You clearly see the code and think, should I really run this and set this all up? No,
