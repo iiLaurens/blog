@@ -47,9 +47,14 @@ containing all your originals cards and progress of you korean vocabulary deck (
 and extended to have more sound fragments. In total, I found that this script increases
 the sound fragment by 4230 samples making *a total of 4923* notes with audio.
 
+# Can't you just give me your deck?
+You clearly see the code and think, should I really run this and set this all up? No,
+I understand completely as true programmers are inherently lazy (hence they let programs
+do their work). I have simply uploaded a fresh copy of the original deck as stated above,
+on which my script did all the heavy lifting. You can simply [download it here]({filename}/files/Korean vocabulary by Evita and Laurens.apkg). I hope this helps you!
 
 
-# The python script
+### The python script
 ```python
 import sqlite3 as lite
 import sys
@@ -238,5 +243,5 @@ if __name__ == "__main__":
     edit_media_file()
     zipdir(dir + "download\\", 'out.apkg')
     print("SUCCESFULLY ADDED {} SOUND FRAGMENTS".format(addedcount))
-    
+
 ```
