@@ -52,7 +52,6 @@ I understand completely as true programmers are inherently lazy (hence they let 
 do their work). I have simply uploaded a fresh copy of the original deck as stated above,
 on which my script did all the heavy lifting. You can simply [download it here]({filename}/files/Korean vocabulary by Evita and Laurens.apkg). I hope this helps you!
 
-
 ### The python script
 ```python
 import sqlite3 as lite
