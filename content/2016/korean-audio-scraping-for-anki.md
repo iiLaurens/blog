@@ -33,7 +33,7 @@ for example in `C:\tmp\`, and rename it to `in.apkg`.
 The python 3 script at the bottom of this page will scrape the dictionary pages of
 [Naver](www.naver.com) (preferred) or [Daum](www.daum.net). Put this script in the working directory, in my case `C:\tmp\script.py`.
 Then open a command window in that folder (`shift` + `right click`, then choose *open command
-window here* if you are on Windows). The following script will start the script, make sure
+window here* if you are on Windows). The following command will start the script, make sure
 that python 3 is installed:
 
 ```
