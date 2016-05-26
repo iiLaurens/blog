@@ -1,6 +1,6 @@
 Title: Scraping media from TTMIK
 Slug: scraping-media-from-TTMIK
-Date: 2016-05-22 12:44
+Date: 2016-05-26 20:25
 Tags: Korean, web, scraping, Python
 Author: Laurens
 
