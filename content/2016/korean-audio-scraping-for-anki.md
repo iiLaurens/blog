@@ -1,7 +1,7 @@
 Title: Scraping korean audio fragments for Anki cards
 Slug: korean-audio-scraping-for-anki
 Date: 2016-05-22 12:44
-Tags: Anki, korean, audio, scraper, python
+Tags: Anki, Korean, web, scraping, Python
 Author: Laurens
 
 Besides programming, I am also quite fond of the Korean language. One of the apps I
