@@ -1,247 +1,145 @@
-Title: Scraping korean audio fragments for Anki cards
-Slug: korean-audio-scraping-for-anki
-Date: 2016-05-22 12:44
-Tags: Anki, Korean, web, scraping, Python
+Title: Converting TTMIK lessons from PDF to PNG files
+Slug: TTMIK-pdf-to-png
+Date: 2016-06-20 12:44
+Tags: Anki, Korean, converting pdf to png, TTMIK, Python
 Author: Laurens
 
-Besides programming, I am also quite fond of the Korean language. One of the apps I
-use to study korean is [Anki](www.ankisrs.net). Anki is a program that enables people
-to remember information efficiently using a spaced repetition algorithm. Anki is definitely
-not a sexy app by any means, especially compared to the webbased [Memrise](www.memrise.com),
-but it provides a huge amount of control for the end-user. I have come to love Anki for
-this very reason.
+I didn't just [scrape all TTMIK lessons]({filename}2016/TTMIK-web-crawling.md) for archival purposes. What I really wanted is a structured way for me to study the lessons. I found that reading lessons without reviewing them regularly did not stick. If only there was a way to have some sorted of spaced repetition algorithm, perhaps something like [Anki](www.ankisrs.net)...
 
-Anki also provides an easy distribution system where people can share their *decks*. If there
-is any language and language course that you are taking, there is probably someone out
-there who did it before you and shared an Anki deck for it. Finding quality decks however is
-rather hard. Luckily, for the Korean language I found an excellent [Korean vocabulary deck
-by Evita](https://ankiweb.net/shared/info/4066961604). For what it's worth, I like to
-give credits to her for making my studies so much easier. The deck contains thousands of the
-most common words in decreasing order. There is a decent amount of sounds added to,
-which really helps with getting the pronunciation right. Unfortunately, too often I found
-that sounds are missing. I really wanted to have a more complete set of sound fragments to
-improve my studies so decided to write a little script in Python to do this for me.
-I will briefly guide you through the steps that are needed to run this script.
+# Porting TTMIK content to Anki
+One of the problems with the PDF files is that Anki and/or AnkiDroid do not have native support for PDF files. My initial solution was just to have little notes that referred to lessons, and I would have to pull the lesson on screen using some media device myself. Clearly, this was bothering as sometimes I just want to quickly review a lesson when a short timeslot becomes available during the day (yes, a toilet session is one of them). Luckily enough Anki does have image support which we can depend on.
 
-# Scraping sound fragments and adding it to your deck
-First, obtain the [Korean vocabulary deck by Evita](https://ankiweb.net/shared/info/4066961604) to operate on.
-**If you already have made progress in this deck and do not want to lose it**,
-it is also possible to export this deck from your own Anki environment. Make sure to include
-the progress whilst exporting the `.apkg` file. Copy this file to a empty directory,
-for example in `C:\tmp\`, and rename it to `in.apkg`.
-
-The python 3 script at the bottom of this page will scrape the dictionary pages of
-[Naver](www.naver.com) (preferred) or [Daum](www.daum.net). Put this script in the working directory, in my case `C:\tmp\script.py`.
-Then open a command window in that folder (`shift` + `right click`, then choose *open command
-window here* if you are on Windows). The following command will start the script, make sure
-that python 3 is installed:
-
-```
-python script.py
-```
-
-Executing the script will take a few hours. Please wait for it to finish. But no worries,
-the script can be interrupted. Simply run the script again to continue where it left off.
-In the end, a new file should have appeared named `out.apkg`. This is the new deck,
-containing all your originals cards and progress of you Korean vocabulary deck (by *Evita*),
-and extended to have more sound fragments. In total, I found that this script adds **4130 new sound fragments**, making a total of 4823 notes with audio and just around 90 that still lack audio. That's quite a significant improvement!
-
-# Can't you just give me your deck?
-You clearly see the code and think, should I really run this and set this all up? No,
-I understand completely as true programmers are inherently lazy (hence they let programs
-do their work). I have simply uploaded a fresh copy of the original deck as stated above,
-on which my script did all the heavy lifting. You can simply [download it here]({filename}/files/Korean vocabulary by Evita and Laurens.apkg). I hope this extended
-deck helps you as much as it did for me!
-
+The Python script at the bottom of this post serves to convert the PDF files of the lessons to PNG images. I have not used this script in a while and I might have broken it in the meantime. I highly doubt anyone will ever need it again as I will simply post the output myself. If someone out there happens to need this, please note that [ghostscript](http://www.ghostscript.com/download/gsdnld.html) is required.
 
 ### The python script
 ```python
-import sqlite3 as lite
-import sys
-import requests
-from lxml import html
-import re
+import fnmatch
 import os
-import json
-import codecs
-from shutil import copyfile, make_archive
-import zipfile
-
-# Do not forget to set the working directory. A sdubdirectory named 'download' is expected to be in it.
-dir = '.\\' # relative path
+import subprocess
+import traceback
+from PIL import Image, ImageChops
+from math import ceil, floor
+import sys
 
 
-def loop_anki_cards():
-    copyfile(dir + 'unzip\\collection.anki2', dir + "download\\" + 'collection.anki2')
-    con = lite.connect(dir + "download\\" + 'collection.anki2')
-    with con:
-        cur = con.cursor()
-        cur.execute("SELECT id,flds FROM notes")
+def gs_pdf_to_png(pdffilepath, output, resolution):
+    """Converts a pdf to a png image
+    """
+    GHOSTSCRIPTCMD = "C:\\Program Files (x86)\\gs\\gs9.18\\bin\\gswin32.exe"
+    if not os.path.isfile(pdffilepath):
+        print("'%s' is not a file. Skip." % pdffilepath)
+    pdfname, ext = os.path.splitext(pdffilepath)
 
-        rows = cur.fetchall()
-
-        current = 0
-        total = len(rows)
-        success = 0
-
-        for row in rows:
-            current += 1
-            fields = row[1].split('\x1f')
-            word = fields[0]
-            wordE = fields[1]
-
-            if fields[-1] == '':
-                print("Attempting to fetch word: {}".format(wordE.encode('utf-8')))
-                fetch = fetch_mp3(word)
-                if fetch:
-                    success += 1
-                    fields[-1] = '[sound:_kr_voc_evita_' + word + '.mp3]'
-            else:
-                # rename the filenames of sound fragmetns to have a prefix, to stop name collision errors with other decks
-                fields[-1] = fields[-1][:7] + '_kr_voc_evita_' + fields[-1][7:]
-
-            a = '\x1f'.join(fields).replace("'", "''")
-
-            cur.execute("UPDATE notes SET flds = '" + a + "' WHERE id = " + str(row[0]))
-        con.commit()
-        return success
-
-
-def fetch_mp3(word):
-    filename = '_kr_voc_evita_' + word + '.mp3'
-    if os.path.exists(dir + 'download\\' + filename):
-        # File already exists, so no need to download again
-        print('>> Sound fragment already exists')
-        return filename
-
-    url = fetch_mp3_url(word)
-    if url:
-        with open(dir + 'download\\' + filename, 'xb') as out_file:
-            try:
-                file = requests.get(url).content
-                out_file.write(file)
-                del file
-                print('>> Succesfully saved word')
-                return filename
-            except:
-                return None
-    else:
-        return None
-
-
-def fetch_mp3_url(word):
-    # First attempt naver, if unable to extract sound, try daum.
-    url = naver_url(word)
-    if not url:
-        url = daum_url(word)
-    return url
-
-
-def daum_url(word):
-    ############
-    # ATTEMPT 1: Standard Daum
-    ############
-    pre_url = 'http://alldic.daum.net/search.do?q='
-    post_url = '&dic=kor'
-
-    # get html and parse it into a searchable tree for python
-    page = requests.get(pre_url + word + post_url)
-    tree = html.fromstring(page.content)
-
-    # find the mp3 url file javascript code using a XPath
-    string = tree.xpath('//*[@id="mArticle"]/div[1]/div[2]/div[2]/div[1]/div/strong/span/a/@href')
-
-    # If succesfully found, extract the sound url from the javascript event between the quotes
-    if len(string) > 0:
-        mp3 = string[0]
-        print(">> Found sound fragment on Daum")
-        return mp3
-
-    ############
-    # ATTEMPT 2: Daum forwarded
-    ############
-    # If we get here, it means we couldn't find the sound url because this is a redirecting page. Follow the redirect:
-    regex = re.search(".+has_exact_redirect', '(.*)_(.*)'.*", page.text)
     try:
-        url = 'http://alldic.daum.net/word/view.do?wordid=%s&q=%s&supid=%s' % (regex.group(1), word, regex.group(2))
-        page = requests.get(url)
-
-        tree = html.fromstring(page.content)
-        string = tree.xpath('//*[@id="mSub"]/div/div[2]/div/em/span[2]/span/a[1]/@href')
-        if len(string) > 0:
-            mp3 = string[0]
-            print(">> Followed redirect and found sound fragment on Daum")
-            return mp3
+        # Change the "-rXXX" option to set the PNG's resolution.
+        # http://ghostscript.com/doc/current/Devices.htm#File_formats
+        # For other commandline options see
+        # http://ghostscript.com/doc/current/Use.htm#Options
+        arglist = [GHOSTSCRIPTCMD,
+                   "-dBATCH",
+                   "-dNOPAUSE",
+                   "-sOutputFile=" + output + "-%03d.png",
+                   "-sDEVICE=png16m",
+                   "-r%s" % resolution,
+                   pdffilepath]
+        print("Running command:\n%s" % ' '.join(arglist))
+        sp = subprocess.Popen(
+            args=arglist,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+    except OSError:
+        sys.exit("Error executing Ghostscript ('%s'). Is it in your PATH?" %
+                 GHOSTSCRIPTCMD)
     except:
-            return None
+        print("Error while running Ghostscript subprocess. Traceback:")
+        print("Traceback:\n%s" % traceback.format_exc())
 
-def naver_url(word):
-    url = 'http://dic.naver.com/search.nhn?dicQuery={}&query={}'.format(word, word)
-
-    # get html and parse it into a searchable tree for python
-    page = requests.get(url)
-    tree = html.fromstring(page.content)
-
-    # find the mp3 url file javascript code using a XPath
-    i = 1
-    while tree.xpath('//ul[contains(@class,"lst_krdic")]/li[%d]/p' % i):
-        # Check for each entry what is the precise word
-        element = tree.xpath('//ul[contains(@class,"lst_krdic")]/li[%d]/p/a/span' % i)
-        if len(element) > 0:
-            text = element[0].xpath('string()')
-            if text == word:
-                # We got a word that matches the one we want. Try and find a audio link
-                element = tree.xpath('//ul[contains(@class,"lst_krdic")]/li[%d]/p/a[2]/@playlist' % i)
-                if len(element) > 0:
-                    # we found a playlist, return the link and exit the function
-                    print(">> Found sound fragment on Naver")
-                    return element[0]
-        i += 1
-    return None
+    stdout, stderr = sp.communicate()
+    print("Ghostscript stdout:\n'%s'" % stdout)
+    if stderr:
+        print("Ghostscript stderr:\n'%s'" % stderr)
 
 
-def edit_media_file():
-    with open(dir + 'unzip\\media', encoding="utf8") as data_file:
-        data = json.load(data_file)
-    i = len(data)
-    for j in range(i):
-        print("Moving file...({}/{})".format(j, i - 1))
-        data[str(j)] = "_kr_voc_evita_" + data[str(j)]
-        copyfile(dir + "unzip\\" + str(j), dir + "download\\" + str(j))
-    i = len(data)
-    for filename in [x for x in os.listdir(dir + "\\download") if x[-4:] == ".mp3"]:
-        data[i] = filename
-        os.rename(dir + "download\\" + filename, dir + "download\\" + str(i))
-        i += 1
+def merge_images(indexstr):
+    """Merge documents in PNG format that include a header and footer.
 
-    with codecs.open(dir + 'download\\media', 'w+', encoding='utf8') as outfile:
-        json.dump(data, outfile, ensure_ascii=False)
+    The header and footer are removed and are only added at the top and bottom of
+    the merged image.
+    """
+    pngimgs = fnmatch.filter(os.listdir('.'), indexstr + '-*.png')
+    width, height = Image.open(pngimgs[0]).size
+
+    # In TTMIK lessons both the header and footer are each 10% of the height.
+    # First save a copy of the header and footer.
+    footer = Image.open(pngimgs[0]).crop((0, floor(height * 0.9), width, height))
+    header = Image.open(pngimgs[0]).crop((0, 0, width, floor(height * 0.1)))
+
+    # Create a list of images that will be merged. Starting with the header and
+    # ending with the footer.
+    images = [header]
+    for i in range(len(pngimgs)):
+        im = Image.open(pngimgs[i])
+        im = im.crop((0, ceil(height * 0.1), width, ceil(height * 0.9)))
+        images.append(crop_whitespace(im))
+    images.append(footer)
+
+    # Now merge the images
+    total_height = sum([im.size[1] for im in images])
+    new_im = Image.new('RGB', (width, total_height))
+    y_offset = 0
+    for im in images:
+        new_im.paste(im, (0, y_offset))
+        y_offset += im.size[1]
+    new_im.save(indexstr + '.png')
 
 
-def prepare_dirs():
-    # make directories
-    if not os.path.exists('unzip'):
-        os.makedirs('unzip')
-    if not os.path.exists('download'):
-        os.makedirs('download')
+def crop_whitespace(image):
+    """Remove surrounding empty space around an image.
 
-    with zipfile.ZipFile('in.apkg', "r") as z:
-        z.extractall(dir + 'unzip')
+    This implemenation assumes that the surrounding space has the same colour
+    as the top leftmost pixel.
+    """
+    bg = Image.new(image.mode, image.size, image.getpixel((0, 0)))
+    diff = ImageChops.difference(image, bg)
+    bbox = diff.getbbox()
+    print(bbox)
+    if not bbox:
+        return image
+    return image.crop((0, 0, image.size[0], bbox[3]))
 
 
-def zipdir(dirpath, filename):
-    ziph = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
-    # ziph is zipfile handle
-    for root, dirs, files in os.walk(dirpath):
-        for file in files:
-            ziph.write(os.path.join(root, file), file)
+def delete_cache(indexstr):
+    pngimgs = fnmatch.filter(os.listdir('.'), indexstr + '-*.png')
+    for f in pngimgs:
+        os.remove(f)
 
 
 if __name__ == "__main__":
-    prepare_dirs()
-    addedcount = loop_anki_cards()
-    edit_media_file()
-    zipdir(dir + "download\\", 'out.apkg')
-    print("SUCCESFULLY ADDED {} SOUND FRAGMENTS".format(addedcount))
+    os.chdir('C:\mydir')
+
+    # First check where to start (in case process was interrupted previously)
+    index = 1
+    finishedimgs = fnmatch.filter(os.listdir('.'), '*.png')
+    while '%03d.png' % index in finishedimgs:
+        index += 1
+    indexstr = '%03d' % index
+
+    # Set the first PDF file we want to start with. Assumes that the PDF files start
+    # with the prefix TTMIK xxx
+    pdffile = fnmatch.filter(os.listdir('.'), 'TTMIK ' + indexstr + '*.pdf')[0]
+
+    while len(pdffile) > 0:
+        gs_pdf_to_png(pdffile, indexstr, 300)
+        merge_images(indexstr)
+        delete_cache(indexstr)
+
+        index += 1
+        indexstr = '%03d' % index
+        pdffile = fnmatch.filter(os.listdir('.'), 'TTMIK ' + indexstr + '*.pdf')[0]
 
 ```
+# The result: a TTMIK deck!
+I have run the script and gathered the images. One example of a lesson looks like this after conversion:
+> ![TTMIK lesson](https://ankiweb.net/shared/mpreview/816509991/0.png)
+
+For my and your convenience I added all the images to a Anki deck and added some metadata. You can just grab this Anki deck and start studying the *talk to me in korean* lessons with discipline and efficiency! [Just grab it here](https://ankiweb.net/shared/info/816509991)
