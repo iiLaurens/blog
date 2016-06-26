@@ -4,7 +4,7 @@ Date: 2016-06-20 12:44
 Tags: Anki, Korean, converting pdf to png, TTMIK, Python
 Author: Laurens
 
-I didn't just [scrape all TTMIK lessons]({filename}2016/TTMIK-web-crawling.md) for archival purposes. What I really wanted is a structured way for me to study the lessons. I found that reading lessons without reviewing them regularly did not stick. If only there was a way to have some sorted of spaced repetition algorithm, perhaps something like [Anki](www.ankisrs.net)...
+I didn't just [scrape all TTMIK lessons]({filename}2016\TTMIK-web-crawling.md) for archival purposes. What I really wanted is a structured way for me to study the lessons. I found that reading lessons without reviewing them regularly did not stick. If only there was a way to have some sorted of spaced repetition algorithm, perhaps something like [Anki](www.ankisrs.net)...
 
 # Porting TTMIK content to Anki
 One of the problems with the PDF files is that Anki and/or AnkiDroid do not have native support for PDF files. My initial solution was just to have little notes that referred to lessons, and I would have to pull the lesson on screen using some media device myself. Clearly, this was bothering as sometimes I just want to quickly review a lesson when a short timeslot becomes available during the day (yes, a toilet session is one of them). Luckily enough Anki does have image support which we can depend on.
