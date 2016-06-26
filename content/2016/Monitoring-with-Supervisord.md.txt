@@ -1,0 +1,24 @@
+Title: Monitoring with Supervisord
+Slug: Monitoring-with-Supervisord
+Date: 2016-6-16 23:01
+Tags: Linux, Daemon, Monitoring, Supervising, Python, Supervisord
+Author: Laurens
+
+Sometimes you would like to run a process continously. It should run always, even after a failing. We require a supervisor that monitors a process and starts or restarts it whenever needed. This is why *Supervisord* exists.
+
+I will be running supevisor on my Raspberry pi.
+
+# Installation and configuration
+To intall supervisor, just run the following command
+`sudo apt-get install -y supervisor`
+To start supervisor after installing it, run it as a service with
+`sudo service supervisor start`
+
+Configuration for Supervisord is found in `/etc/supervisor`. If we look at the configuration file `/etc/supervisord/supervisord.conf`, we'll see at the following at the bottom:
+```Bash
+[include]
+files = /etc/supervisor/conf.d/*.conf
+```
+
+So, any files found in /etc/supervisor/conf.d and ending in .conf will be included. This is where we can add configurations for our services.
+Now we need to tell Supervisord how to run and monitor our Node script. What we'll do is create a configuration that tells Supervisord how to start and monitor the Node script.
