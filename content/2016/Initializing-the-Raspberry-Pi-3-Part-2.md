@@ -1,6 +1,6 @@
 Title: Initializing the Raspberry Pi 3 Part II
 Slug: Initializing-the-raspberry-pi-3-part-II
-Date: 2016-05-03 20:15
+Date: 2016-10-05 20:15
 Tags: Raspberry Pi 3, Settings
 Author: Laurens
 
