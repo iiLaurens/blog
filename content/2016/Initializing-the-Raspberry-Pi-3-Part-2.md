@@ -4,7 +4,7 @@ Date: 2016-10-05 20:15
 Tags: Raspberry Pi 3, Settings
 Author: Laurens
 
-Here I will be updating some of my adventures with my RPi3. I will be pushing SSH keys for secure connecting and I will set up how to boot from USB. I also assume that we are working on *bash on ubuntu for windows*.
+Here I will be updating some of my adventures with my RPi3. I will be pushing SSH keys for secure connecting and I will set up how to boot from USB. I also assume that we are working on *bash on ubuntu for windows*, which is new since the Anniversary update of Windows on 10. This allows me to directly connect with my Raspberry Pi without additional software for Windows PC's. However, you can use any preferred SSH client for Windows.
 
 # Programming USB boot mode
 Next up is programming the Pi to boot from the USB. This is now supported in the newest releases of raspbian, but only for the Raspberry Pi 3. This special mode completely removes the need for having a SD card inserted.
