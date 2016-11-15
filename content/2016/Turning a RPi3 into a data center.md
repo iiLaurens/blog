@@ -1,6 +1,6 @@
 Title: Turning a Raspberry Pi 3 into a secure torrent box
 Slug: RPi3-torrent-box
-Date: 2016-10-05 23:16
+Date: 2016-11-15 23:10
 Tags: Raspberry Pi 3, Settings
 Author: Laurens
 
@@ -23,7 +23,7 @@ sudo rename "s/.ovpn/.conf/" *.ovpn
 ```
 Acces to VPN servers is often password protect. The configuration files generally do not include your personal password and username so we have to add them ourselves. Drop your username and password into a file named `auth.txt`:
 ```
-cat > auth.tdxt << EOF
+sudo cat << EOF | sudo tee auth.txt
 username
 password
 EOF
@@ -85,12 +85,12 @@ Now this is where things get tricky, and I hardly have a clue what I am doing. A
 
 First, start by marking packets that originate from the `deluge` user.
 ```
-iptables -t mangle -A OUTPUT -m owner --uid deluge -j MARK --set-mark 1
-iptables -t nat -A POSTROUTING -m mark --mark 1 -j MASQUERADE
+sudo iptables -t mangle -A OUTPUT -m owner --uid deluge -j MARK --set-mark 1
+sudo iptables -t nat -A POSTROUTING -m mark --mark 1 -j MASQUERADE
 ```
 Next at an ip rule that tells which route table to look at for the marked packets.
 ```
-ip rule add fwmark 0x1 table 100
+sudo ip rule add fwmark 0x1 table 100
 ```
 Now we have to specify the actual routing table that we just referred to. First let's take a look at the current routing table.
 ```
@@ -100,7 +100,7 @@ default via 192.168.30.1 dev eth0  metric 202
 10.6.0.120 dev tun0  proto kernel  scope link  src 10.6.0.119
 128.0.0.0/1 via 10.6.0.120 dev tun0
 176.127.251.72 via 192.168.30.1 dev eth0
-192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.215  metric 202
+192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.210  metric 202
 ```
 So these are the settings that make OpenVPN work for my VPN provider (I edited some IP addresses just to be safe). The idea behind ip routes is that the kernel chooses the most specific match. OpenVPN pulls all the traffic to the gateway `10.6.0.120` because it splits the general 0.0.0.0/0 into two slightly more specific but collectively exhaustive ranges. Namely it targets 0.0.0.0/1 and 128.0.0.0/1 (which together encompass the entire IPv4 address space). To prevent OpenVPN from pulling all traffic through the `tun0` interface, we have to delete these rules. First let's isolate the two lines.
 
@@ -109,19 +109,34 @@ $ ip route | grep -P '[0-9]+\.0\.0\.0/1'
 0.0.0.0/1 via 10.6.0.120 dev tun0
 128.0.0.0/1 via 10.6.0.120 dev tun0
 ```
-**It is important that you write down these two lines as we need them later to recover the VPN connection!**
-Now delete these two routes
+Now delete these two routes simply by adding `sudo ip route del` in front
 ```
 sudo ip route del 0.0.0.0/1 via 10.6.0.120 dev tun0
 sudo ip route del 128.0.0.0/1 via 10.6.0.120 dev tun0
 ```
 Next we add them under our alternative route table by adding the suffix `table 100`.
 ```
-sudo ip route add 0.0.0.0/1 via 10.6.0.120 dev tun0 table 100
-sudo ip route add 128.0.0.0/1 via 10.6.0.120 dev tun0 table 100
+sudo ip route add default via 10.6.0.120 dev tun0 table 100
 ```
+If we also want to allow local ip addresses so that we can still access deluge, consider the following line:
+```
+$ ip route | grep -P "dev eth0 .* src"
+192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.210  metric 202
+```
+Add this line under table 100:
+```
+sudo ip route add 192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.210  metric 202 table 100
+```
+This is where deluge works for me. I can access it locally from my network without issues, and I can start torrents without leaking my IP address. To verify this, try the following command:
+```
+curl http://jsonip.com
+sudo -u deluge curl http://jsonip.com
+```
+Both should return a different IP!
+
 Finally, we want to build a kill switch so that deluge can only use VPN and nothing else, so that it cannot go over the default `eth0` connection.
 ```
+sudo iptables -A OUTPUT -m owner --uid-owner deluge -d 192.168.30.0/24 -j ACCEPT
 sudo iptables -A OUTPUT -m owner --uid-owner deluge \! -o tun0 -j REJECT
-sudo iptables -A OUTPUT -m owner --uid-owner deluge -d 192.168.31.0/24 -j ACCEPT
 ```
+And voila! no worries about a IP leak if your VPN server drops!
