@@ -81,62 +81,63 @@ sudo -u deluge deluged
 Now deluge should be ready to accept connections from the *Thin Client*! To connect, simply enter the ip address of you Raspberry pi and the credentials you created earlier.
 
 # Restrict torrenting traffic to use only the VPN connection
-Now this is where things get tricky, and I hardly have a clue what I am doing. All I can tell is that this appears to work for me.
+What OpenVPN does by default is pull all traffic over the tunnel it creates. I only wanted my torrent traffic to use the VPN. Now this is where things took me a long time to figure out. Networking is just pretty confusing stuff for someone that never really bothered with it. However, I was able to solve it in the following way:
 
-First, start by marking packets that originate from the `deluge` user.
+First, we move to the openvpn directory again and make sure openvpn and deluged are not running.
 ```
-sudo iptables -t mangle -A OUTPUT -m owner --uid deluge -j MARK --set-mark 1
-sudo iptables -t nat -A POSTROUTING -m mark --mark 1 -j MASQUERADE
+cd /etc/openvpn
+sudo pkill deluged
+sudo pkill openvpn
 ```
-Next at an ip rule that tells which route table to look at for the marked packets.
+Now we need to change the confuguration file a bit so we stop openvpn from pulling all traffic to the tunnel.
 ```
-sudo ip rule add fwmark 0x1 table 100
+sudo sed -i 's/client/client\nroute-noexec\nroute-up route-up.sh/' *.conf
 ```
-Now we have to specify the actual routing table that we just referred to. First let's take a look at the current routing table.
+But this also means we have to add the correct routes for our internet packages as well. For this, we can create the `route-up.sh` file. Create the file using
 ```
-$ ip route
-0.0.0.0/1 via 10.6.0.120 dev tun0
-default via 192.168.30.1 dev eth0  metric 202
-10.6.0.120 dev tun0  proto kernel  scope link  src 10.6.0.119
-128.0.0.0/1 via 10.6.0.120 dev tun0
-176.127.251.72 via 192.168.30.1 dev eth0
-192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.210  metric 202
+sudo nano route-up.sh
 ```
-So these are the settings that make OpenVPN work for my VPN provider (I edited some IP addresses just to be safe). The idea behind ip routes is that the kernel chooses the most specific match. OpenVPN pulls all the traffic to the gateway `10.6.0.120` because it splits the general 0.0.0.0/0 into two slightly more specific but collectively exhaustive ranges. Namely it targets 0.0.0.0/1 and 128.0.0.0/1 (which together encompass the entire IPv4 address space). To prevent OpenVPN from pulling all traffic through the `tun0` interface, we have to delete these rules. First let's isolate the two lines.
+Paste the following contents and save with `ctrl+x`. Please note that I assume that the default internet uses the `eth0` interface. If it is not, then you should replace each occurence with your specific interface (for example `wlan0`).
+```
+#!/bin/bash
 
+echo "Delete any pre-existing rules"
+# It's okay if we get errors if the rules were not found.
+# The end goal is to not have these rules so it's fine.
+ip route flush table 111
+iptables -t mangle -D OUTPUT -m owner --uid deluge -j MARK --set-mark 1
+iptables -t nat -D POSTROUTING -m mark --mark 1 -j MASQUERADE
+ip rule del fwmark 0x1 table 111
+
+echo "Applying routes"
+iptables -t mangle -A OUTPUT -m owner --uid deluge -j MARK --set-mark 1
+iptables -t nat -A POSTROUTING -m mark --mark 1 -j MASQUERADE
+ip rule add fwmark 0x1 table 111
+
+ip route add 0.0.0.0/1 via $route_vpn_gateway dev $dev table 111
+ip route add 128.0.0.0/1 via $route_vpn_gateway dev $dev table 111
+ip route add $(echo $route_net_gateway | sed 's/\.[0-9]*$/.0/')/24 dev eth0  proto kernel  scope link  src $(ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)  metric 202  table 111
+ip route add blackhole default table 111
+ip route flush cache
 ```
-$ ip route | grep -P '[0-9]+\.0\.0\.0/1'
-0.0.0.0/1 via 10.6.0.120 dev tun0
-128.0.0.0/1 via 10.6.0.120 dev tun0
+The script does a couple of things. First, it deletes any pre-existing rules that might be created if you restart OpenVPN in the future. After that, I add multiple filters and routes. First I mark all packets that originate from the `deluge` user, which is who will be running the torrent daemon. Then, we tell the kernel to use a different routing table if a outward destined packet is marked. I finish by generating the routes for table 111. The first two `ip route add` commands just define the tunnel to our VPN server. The third makes sure that everything that is destined for the local network does not go through the tunnel but over the local network. Finally, a black hole is added. If the connection with the VPN server drops for whatever reason, then the tunnel routes will dissapear. In that case, packets will end up in the blackhole and can not secretly exit through our local network. This is *killswitch* to make sure no torrent traffic leaves the Raspberry Pi unsecured.
+
+Finally we have to make the file executable by everyone.
 ```
-Now delete these two routes simply by adding `sudo ip route del` in front
+sudo chown root route-up.sh
+sudo chmod +x route-up.sh
 ```
-sudo ip route del 0.0.0.0/1 via 10.6.0.120 dev tun0
-sudo ip route del 128.0.0.0/1 via 10.6.0.120 dev tun0
+Now we can test whether everything works fine. First start OpenVPN.
 ```
-Next we add them under our alternative route table by adding the suffix `table 100`.
+sudo openvpn --daemon --config /etc/openvpn/<file>.conf
 ```
-sudo ip route add default via 10.6.0.120 dev tun0 table 100
-```
-If we also want to allow local ip addresses so that we can still access deluge, consider the following line:
-```
-$ ip route | grep -P "dev eth0 .* src"
-192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.210  metric 202
-```
-Add this line under table 100:
-```
-sudo ip route add 192.168.30.0/24 dev eth0  proto kernel  scope link  src 192.168.30.210  metric 202 table 100
-```
-This is where deluge works for me. I can access it locally from my network without issues, and I can start torrents without leaking my IP address. To verify this, try the following command:
+And test that it works.
 ```
 curl http://jsonip.com
 sudo -u deluge curl http://jsonip.com
 ```
-Both should return a different IP!
-
-Finally, we want to build a kill switch so that deluge can only use VPN and nothing else, so that it cannot go over the default `eth0` connection.
+Both commands should return a different IP, as one is run by you as an user, and the other is run by the `deluge` user. If you pass this test, then we can start deluge
 ```
-sudo iptables -A OUTPUT -m owner --uid-owner deluge -d 192.168.30.0/24 -j ACCEPT
-sudo iptables -A OUTPUT -m owner --uid-owner deluge \! -o tun0 -j REJECT
+sudo -u deluge deluged
 ```
-And voila! no worries about a IP leak if your VPN server drops!
+If everything is allright, you should be able to connect to deluge using your client over the local network, but the actual torrent traffic is tunneled over the VPN. That's it!
