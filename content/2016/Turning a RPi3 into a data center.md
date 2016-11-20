@@ -116,9 +116,8 @@ ip rule add fwmark 0x1 table 111
 
 ip route add 0.0.0.0/1 via $route_vpn_gateway dev $dev table 111
 ip route add 128.0.0.0/1 via $route_vpn_gateway dev $dev table 111
-ip route add $(echo $route_net_gateway | sed 's/\.[0-9]*$/.0/')/24 dev eth0  \
- proto kernel  scope link  src $(ifconfig eth0 | grep "inet addr" | cut -d ':' \
-  -f 2 | cut -d ' ' -f 1)  metric 202  table 111
+ip route add $(echo $route_net_gateway | sed 's/\.[0-9]*$/.0/')/24 dev eth0  proto kernel  scope link \
+  src $(ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)  metric 202  table 111
 ip route add blackhole default table 111
 ip route flush cache
 ```
