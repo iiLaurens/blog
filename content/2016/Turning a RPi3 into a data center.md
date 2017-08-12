@@ -1,8 +1,11 @@
-Title: Turning a Raspberry Pi 3 into a secure torrent box
-Slug: RPi3-torrent-box
+Title: A secure torrent solution for Raspbian, Debian or Ubuntu
+Slug: Secure-torrenting
 Date: 2016-11-15 23:10
 Tags: Raspberry Pi 3, Settings
 Author: Laurens
+
+**Edit June 2017:**
+*I once wrote this blog to turn my raspberry pi in a do-it-all home server. One of the tasks I needed it to do was to use secure and undetectable torrent connections for 'reasons'. This blogpost shows actually how to set this up for a raspberry pi. It allows a VPN to be run in the background without pulling all the data traffic on the little machine. It only forwarded torrent traffic (or any traffic by an arbitrary but prespecified user). These days however I have moved to a more powerfull machine which is able to run an Ubuntu desktop. Unfortunately these guidelines did not work immediately for an Ubuntu setup. Having investigated the issue I have now added additional descriptions for this setup to work on an Ubuntu (version 16 or higher) machine. These descriptions can be found at the bottom of this page.*
 
 I will be discussing some of the applications I have been using on my raspberry pi to turn it into a low power torrent that can always stay powered on. It serves as a torrent box with *Deluge*, which I can control remotely from one of my desktop computers using deluge's *thin client*. I will also show how to connect deluge through a secure VPN tunnel such that all torrenting traffic is safely encrypted whilst the rest of the Raspberry Pi's traffic can travel through regular channels.
 
@@ -30,7 +33,7 @@ EOF
 ```
 Now we have edit our VPN's configuration files to include a reference to our authorization file.
 ```
-sudo sed -i 's/auth-user-pass/auth-user-pass auth.txt/' *.conf
+sudo sed -i 's|auth-user-pass|auth-user-pass \/etc\/openvpn\/auth.txt|' *.conf
 ```
 The above command replaces every occurance of `auth-user-pass` with `auth-user-pass auth.txt`. If your configuration file did not include a `auth-user-pass` line then you have to append it yourself. Finally see if is working correctly using a
 ```
@@ -50,7 +53,7 @@ First of all, we want deluge to operate from a seperate user so that later we ca
 ```
 sudo adduser deluge
 ```
-Next, we have to start deluge once under the deluge username to create all the configuration files. The -u after the sudo command tells our Pi to run this operations as the `deluge` user.
+Next, we have to start deluge once under the deluge username to create all the configuration files. The -u after the sudo command tells our Pi to run this operations as the `deluge` user. (for an Ubuntu setup, one might have to add the -H flag before the -u flag to prevent the sudo command from defaulting to the root user's home folder)
 ```
 sudo -u deluge deluged
 sudo pkill deluged
@@ -89,9 +92,9 @@ cd /etc/openvpn
 sudo pkill deluged
 sudo pkill openvpn
 ```
-Now we need to change the confuguration file a bit so we stop openvpn from pulling all traffic to the tunnel.
+First we need to allow OpenVPN to change our DNS servers. Now we need to change the configuration file again so we stop openvpn from pulling all traffic to the tunnel.
 ```
-sudo sed -i 's/client/client\nroute-noexec\nroute-up route-up.sh/' *.conf
+sudo sed -i 's|client|client\nscript-security 2\nroute-noexec\nroute-up \/etc\/openvpn\/route-up.sh|' *.conf
 ```
 But this also means we have to add the correct routes for our internet packages as well. For this, we can create the `route-up.sh` file. Create the file using
 ```
@@ -116,7 +119,7 @@ ip rule add fwmark 0x1 table 111
 
 ip route add 0.0.0.0/1 via $route_vpn_gateway dev $dev table 111
 ip route add 128.0.0.0/1 via $route_vpn_gateway dev $dev table 111
-ip route add $(ip route | grep -iP 'eth0.+ src')
+ip route add $(ip route | grep -iP 'eth0.+ src') table 111
 ip route add blackhole default table 111
 ip route flush cache
 ```
@@ -127,17 +130,53 @@ Finally we have to make the file executable by everyone.
 sudo chown root route-up.sh
 sudo chmod +x route-up.sh
 ```
+
 Now we can test whether everything works fine. First start OpenVPN.
 ```
 sudo openvpn --daemon --config /etc/openvpn/<file>.conf
 ```
 And test that it works.
 ```
-curl http://jsonip.com
-sudo -u deluge curl http://jsonip.com
+curl https://jsonip.com
+sudo -u deluge curl https://jsonip.com
 ```
 Both commands should return a different IP, as one is run by you as an user, and the other is run by the `deluge` user. If you pass this test, then we can start deluge
 ```
 sudo -u deluge deluged
 ```
-If everything is allright, you should be able to connect to deluge using your client over the local network, but the actual torrent traffic is tunneled over the VPN. That's it!
+If everything is allright, you should be able to connect to deluge using your client over the local network, but the actual torrent traffic is tunneled over the VPN.  If your OpenVPN came with a `/etc/openvpn/update-resolv-conf` file (Google it if not!) you can also hide your default DNS using:
+```
+sudo sed -i 's|client|client\nscript-security 2\nup \/etc\/openvpn\/update-resolv-conf\ndown \/etc\/openvpn\/update-resolv-conf|' *.conf
+```
+That's all for now! I hope this helped for you, if it did, please leave a message!
+
+*Additional remark: Make sure that the deluge user has write access to the directory that you want you torrents to be saved. Otherwise this will result in an error immediately after starting a torrent*
+
+**Update:**
+The ability to mark and forward network packages using iptables is not enabled by default on newer Ubuntu installations, as is pointed out by [this blogpost](http://themediaserver.com/bypass-vpn-connections-specifics-ports-ubuntu-kodibuntu/). Following the above steps will thus work in a torrent client without a connection (due to the killswitch functionality). To enable, one has to change some kernel options. Please run the following code to switch the relevant options on:
+```
+sudo sysctl -w net.ipv4.conf.eth0.rp_filter=0
+sudo sysctl -w net.ipv4.conf.tun0.rp_filter=0
+sudo sysctl -w net.ipv4.conf.all.rp_filter=0
+sudo sysctl -w net.ipv4.conf.default.rp_filter=0
+sudo sysctl -w net.ipv4.conf.lo.rp_filter=0
+
+sudo sysctl -w net.ipv4.conf.all.forwarding=1
+sudo sysctl -w net.ipv4.conf.default.forwarding=1
+sudo sysctl -w net.ipv4.conf.eth0.forwarding=1
+sudo sysctl -w net.ipv4.conf.lo.forwarding=1
+sudo sysctl -w net.ipv4.conf.tun0.forwarding=1
+
+sudo sysctl -w net.ipv6.conf.all.forwarding=1
+sudo sysctl -w net.ipv6.conf.default.forwarding=1
+sudo sysctl -w net.ipv6.conf.eth0.forwarding=1
+sudo sysctl -w net.ipv6.conf.lo.forwarding=1
+sudo sysctl -w net.ipv6.conf.tun0.forwarding=1
+
+sudo sysctl -w net.ipv4.tcp_fwmark_accept=1
+```
+Now reboot the system and start the openVPN connection and test if the IP changes if an URL is fetched by the *deluge* user:
+```
+curl https://jsonip.com
+sudo -u deluge curl https://jsonip.com
+```
