@@ -1,6 +1,6 @@
 Title: Installing Ubuntu on Intel Atom Devices
 Slug: Ubuntu-on-Intel-Atom-Device
-Date: 2017-10-07 19:46
+Date: 2017-07-10 19:46
 Tags: Ubuntu, Beelink, Intel Atom, Install
 Author: Laurens
 
