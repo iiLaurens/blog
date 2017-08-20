@@ -26,12 +26,6 @@ HIDE_SIDEBAR = True
 
 BANNER = False
 
-MARKDOWN = {
-  'extension_configs': {
-    'pyembed.markdown': {}
-  }
-}
-
 DISPLAY_PAGES_ON_MENU = True
 DISPLAY_CATEGORIES_ON_MENU = False
 
