@@ -53,6 +53,7 @@ Now we will test the script. First ensure that Deluge does not user random ports
 sudo bash portforward.sh
 ```
 If successful it will print your VPN IP and port and shows no error. You can test if your port is correctly forwarding with the *test active port* button in the network settings of your Deluge thin client. The picture below illustrates what you should be looking at during testing.
+
 ![deluge]({filename}/images/delugeportsettings.PNG)
 
 # Automating using Cron
